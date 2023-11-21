@@ -1,0 +1,358 @@
+import { Alert, Box, Button, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, ToggleButton } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import 'react-toastify/dist/ReactToastify.css';
+import "../App.css"
+import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Grid } from '@mui/material';
+
+const defaultTheme = createTheme();
+
+const Academics = () => {
+    const [collegeName, setCollegeName] = useState<string>('');
+    const [intrestId, setIntrestId] = useState<string>('');
+    const [qualificationId, setQualificationId] = useState<string>('');
+    const [careerGoals, setCareerGoals] = useState<string>('');
+    const [language, setLanguage] = useState<string>('');
+    const [otherLanguage, setOtherLanguage] = useState<string>('');
+    const [specialization, setSpecialization] = useState<string>('');
+    const [currentlyWorking, setCurrentlyWorking] = useState<boolean>(false);
+    const [availability, setAvailability] = useState<boolean>(false);
+    const [governamentId, setGovernamentId] = useState<File | null>(null);
+    const [experiance, setExperiance] = useState<string>('');
+    const [cv, setCV] = useState<File | null>(null);
+    const [error, setError] = useState<string>('');
+    const [interestOptions, setInterestOptions] = useState<Array<{ id: string; name: string }>>([]);
+    const [qualificationOptions, setQualificationOptions] = useState<Array<{ id: string; name: string }>>([]);
+    const [loading, setLoading] = useState(false);
+    const [governmentIDFileName, setGovernmentIDFileName] = useState('');
+    const [cvFileName, setCVFileName] = useState('');
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const savedAccessToken = localStorage.getItem("AccessToken");
+
+        axios
+            .get('http://localhost:3000/intrests', {
+                headers: {
+                    token: `${savedAccessToken}`,
+                },
+            })
+            .then((response) => {
+                setInterestOptions(response.data.intrests);
+                console.log("Intrests",response.data.intrests);
+            })            
+            .catch((error) => {
+                console.error("Error fetching interest options", error);
+            });
+
+        axios
+            .get('http://localhost:3000/qualifications', {
+                headers: {
+                    token: `${savedAccessToken}`,
+                },
+            })
+            .then((response) => {
+                setQualificationOptions(response.data.qualifications);
+                console.log("qualifications",response.data.qualifications);
+            })
+            .catch((error) => {
+                console.error("Error fetching qualification options", error);
+            });
+    }, []);
+
+    const handleCollageNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCollegeName(event.target.value);
+        setError('');
+    };
+    const handleCareerGoalsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCareerGoals(event.target.value);
+        setError('');
+    };
+
+    const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setLanguage(event.target.value);
+        setError('');
+    };
+    const handleOtherLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOtherLanguage(event.target.value);
+        setError('');
+    };
+    const handleSpecializationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSpecialization(event.target.value);
+        setError('');
+    };
+
+    const handleGovernmentIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            setGovernamentId(files[0]);
+            setGovernmentIDFileName(files[0].name);
+            setError("");
+        }
+    };
+
+    const handleExperianceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setExperiance(event.target.value);
+        setError('');
+    };
+    const handleCVChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+          setCV(files[0]);
+          setCVFileName(files[0].name); 
+          setError("");
+        }
+      };
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const savedAccessToken = localStorage.getItem("AccessToken");
+            const response = await axios.post('http://localhost:3000/academics', {
+                college_name: collegeName,
+                intrest_id: intrestId,
+                qualification_id: qualificationId,
+                career_goals: careerGoals,
+                language: language,
+                other_language: otherLanguage,
+                specialization: specialization,
+                currently_working: currentlyWorking,
+                availability: availability,
+                governament_id: governamentId,
+                experiance: experiance,
+                cv: cv 
+            }, {
+                headers: {
+                    token: `${savedAccessToken}`,
+                },
+            });
+            console.log("i got response", response)
+            navigate("/login");
+        } catch (error) {
+            toast.error("Unable to create activity");
+        }
+        finally {
+            setLoading(true);
+        }
+    };
+
+    const isSubmitDisabled = () => {
+        return (
+            !collegeName ||
+            !intrestId ||
+            !qualificationId ||
+            !careerGoals ||
+            !language ||
+            (!currentlyWorking && !availability) ||
+            !experiance 
+        );
+    };
+
+    return (
+        <ThemeProvider theme={defaultTheme}>
+            <Container component="main" maxWidth="sm">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <div className="App">
+                            <h1 className="tital_text">Academics Form</h1>
+                            <form onSubmit={handleSubmit}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6}>
+                                        <InputLabel id="qualificationIdLabel">Qualification ID</InputLabel>
+                                        <Select
+                                            labelId="qualificationIdLabel"
+                                            id="qualificationId"
+                                            value={qualificationId}
+                                            onChange={(e) => setQualificationId(e.target.value as string)}
+                                            fullWidth
+                                        >
+                                            {qualificationOptions.map(option => (
+                                                <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <InputLabel id="interestIdLabel">Interest ID</InputLabel>
+                                        <Select
+                                            labelId="interestIdLabel"
+                                            id="interestId"
+                                            value={intrestId}
+                                            onChange={(e) => setIntrestId(e.target.value as string)}
+                                            fullWidth
+                                        >
+                                            {interestOptions.map(option => (
+                                                <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            id="collegeName"
+                                            label="College Name"
+                                            variant="filled"
+                                            value={collegeName}
+                                            onChange={handleCollageNameChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            id="careerGoals"
+                                            label="Career Goals"
+                                            variant="filled"
+                                            value={careerGoals}
+                                            onChange={handleCareerGoalsChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            id="language"
+                                            label="Language"
+                                            variant="filled"
+                                            value={language}
+                                            onChange={handleLanguageChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            id="otherLanguage"
+                                            label="Other Language"
+                                            variant="filled"
+                                            value={otherLanguage || ''}
+                                            onChange={handleOtherLanguageChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            id="specialization"
+                                            label="Specialization"
+                                            variant="filled"
+                                            value={specialization || ''}
+                                            onChange={handleSpecializationChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            id="experience"
+                                            label="Experience"
+                                            variant="filled"
+                                            value={experiance || ''}
+                                            onChange={handleExperianceChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <FormControlLabel
+                                            control={
+                                                <ToggleButton
+                                                    value="check"
+                                                    selected={currentlyWorking}
+                                                    onChange={() => {
+                                                        setCurrentlyWorking(!currentlyWorking);
+                                                    }}
+                                                >
+                                                    <CheckIcon />
+                                                </ToggleButton>
+                                            }
+                                            label={<span style={{ color: 'black' }}>Currently Working</span>}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <FormControlLabel
+                                            control={
+                                                <ToggleButton
+                                                    value="check"
+                                                    selected={availability}
+                                                    onChange={() => {
+                                                        setAvailability(!availability);
+                                                    }}
+                                                >
+                                                    <CheckIcon />
+                                                </ToggleButton>
+                                            }
+                                            label={<span style={{ color: 'black' }}>Availability</span>}
+                                        />
+                                    </Grid>
+
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <label htmlFor="governmentId" style={{ display:'flex', alignItems: 'center', color: 'black' }}>
+                                            <CloudUploadIcon sx={{ marginRight: 1, color: 'blue' }} />
+                                            {governmentIDFileName ? <p>{governmentIDFileName}</p>: 'Upload Government ID'}
+                                            </label>
+                                            <input
+                                            id="governmentId"
+                                            type="file"
+                                            onChange={handleGovernmentIDChange}
+                                            style={{ display: 'none' }}
+                                            />
+                                        </Grid>
+
+                                        <Grid item xs={6}>
+                                            <label htmlFor="cv" style={{ display: 'flex', alignItems: 'center', color: 'black' }}>
+                                            <CloudUploadIcon sx={{ marginRight: 1, color: 'green' }} />
+                                            {cvFileName ? <p>{cvFileName}</p> : 'Upload CV'}
+                                            </label>
+                                            <input
+                                            id="cv"
+                                            type="file"
+                                            onChange={handleCVChange}
+                                            style={{ display: 'none' }}
+                                            />
+                                        </Grid>
+                                    </Grid>
+
+                                   
+
+                                    <Grid item xs={12}>
+                                        <div>
+                                            <Button
+                                                variant="contained"
+                                                type="submit"
+                                                onClick={handleSubmit}
+                                                disabled={isSubmitDisabled()}
+                                            >
+                                                Submit
+                                            </Button>
+                                        </div>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </div>
+                    </Box>
+                </Box>
+            </Container>
+        </ThemeProvider>
+    );
+};
+
+export default Academics;
