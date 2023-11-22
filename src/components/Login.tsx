@@ -15,6 +15,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import { Grid } from '@mui/material';
+import logo from "../assets/images/logo-udemy-purple-animation.gif";
 
 function Copyright(props: any) {
   return (
@@ -61,7 +62,7 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       }
     });
     console.log("i got response", response);
-    toast.success("Login Successful");
+    // toast.success("Login Successful");
     navigate('/Home');
     localStorage.setItem("AccessToken", response.data.meta.token);
   } catch (error : any) {
@@ -93,6 +94,12 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
             alignItems: 'center',
           }}
         >
+          <nav className="fixed-navbar">
+            <Link href="/">
+            <img src={logo} className="nav--icon" alt="Learn Now Logo" />
+              </Link>
+              <h3 className="nav--logo_text">LEARN NOW</h3>
+          </nav>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>

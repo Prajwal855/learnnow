@@ -117,22 +117,29 @@ const Academics = () => {
         setLoading(true);
         try {
             const savedAccessToken = localStorage.getItem("AccessToken");
-            const response = await axios.post('http://localhost:3000/academics', {
-                college_name: collegeName,
-                intrest_id: intrestId,
-                qualification_id: qualificationId,
-                career_goals: careerGoals,
-                language: language,
-                other_language: otherLanguage,
-                specialization: specialization,
-                currently_working: currentlyWorking,
-                availability: availability,
-                governament_id: governamentId,
-                experiance: experiance,
-                cv: cv 
-            }, {
+            const formData = new FormData();
+
+            formData.append('college_name', collegeName);
+            formData.append('intrest_id', intrestId);
+            formData.append('qualification_id', qualificationId);
+            formData.append('career_goals', careerGoals);
+            formData.append('language', language);
+            formData.append('other_language', otherLanguage);
+            formData.append('specialization', specialization);
+            if (typeof currentlyWorking !== 'boolean') {
+                formData.append('currently_working', currentlyWorking);
+            }
+            if (typeof availability !== 'boolean') {
+                formData.append('availability', availability);
+            }
+            formData.append('governament_id', governamentId as File);  
+            formData.append('experiance', experiance);
+            formData.append('cv', cv as File);  
+            
+            const response = await axios.post('http://localhost:3000/academics', formData, {
                 headers: {
-                    token: `${savedAccessToken}`,
+                    'Content-Type': 'multipart/form-data',
+                    'token': `${savedAccessToken}`,
                 },
             });
             console.log("i got response", response)

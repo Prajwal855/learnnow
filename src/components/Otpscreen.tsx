@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Grid } from '@mui/material';
+import logo from "../assets/images/logo-udemy-purple-animation.gif";
 
 function Copyright(props: any) {
   return (
@@ -38,35 +38,45 @@ const OTPConfirmation: React.FC = () => {
     setOtp(event.target.value);
   };
 
-  const handleVerifyOtp = async (e:any) => {
+  const handleVerifyOtp = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     try {
       const savedAccessToken = localStorage.getItem("AccessToken");
-      const response =  await axios.post("http://localhost:3000/users/sms_confirmation", {
-        pin: otp,
-      }, {
-        headers: {
-          token: `${savedAccessToken}`,
+      const response = await axios.post(
+        "http://localhost:3000/users/sms_confirmation",
+        {
+          pin: otp,
         },
-      });
+        {
+          headers: {
+            token: `${savedAccessToken}`,
+          },
+        }
+      );
+
       toast.success("OTP Verified");
-      console.log("i got response", response)
-      navigate("/create_academics");
+      console.log("i got response", response);
+
+      const userRole = response.data.user.role;
+      if (userRole === 'admin' || userRole === 'student') {
+        navigate("/login");
+      } else if (userRole === 'teacher') {
+        navigate("/create_academics");
+      }
     } catch (error) {
-      toast.error("Worng OTP");
-    }
-    finally{
+      toast.error("Wrong OTP");
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <>
-        {loading ? (
-          <Loading />
-        ) : (
-          <ThemeProvider theme={defaultTheme}>
+      {loading ? (
+        <Loading />
+      ) : (
+        <ThemeProvider theme={defaultTheme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
@@ -77,33 +87,36 @@ const OTPConfirmation: React.FC = () => {
                 alignItems: 'center',
               }}
             >
+              <nav className="fixed-navbar">
+                <Link href="/">
+                  <img src={logo} className="nav--icon" alt="Learn Now Logo" />
+              </Link>
+              <h3 className="nav--logo_text">LEARN NOW</h3>
+              </nav>
               <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign in
-              </Typography>
-    <div className='App'>
-      <h2 className='otp_text'>OTP Confirmation</h2>
-      <p className='description_text'>Please enter the OTP sent to your registered phone number.</p>
-      <div>
-        <TextField id="filled-hidden-label-normal"
-            defaultValue="" label="OTP" variant="filled"
-          placeholder="Enter OTP"
-          value={otp}
-          onChange={handleOtpChange}
-        /><br/><br/>
-        <Button data-testid='submit' variant="contained"  onClick={handleVerifyOtp}>Verify OTP</Button>
-      </div>
-      <ToastContainer />
-    </div>
-    </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
-   )}
-   </>
- );
+              <div className='App'>
+                <h2 className='otp_text'>OTP Confirmation</h2>
+                <p className='description_text'>Please enter the OTP sent to your registered phone number.</p>
+                <div>
+                  <TextField id="filled-hidden-label-normal"
+                    defaultValue="" label="OTP" variant="filled"
+                    placeholder="Enter OTP"
+                    value={otp}
+                    onChange={handleOtpChange}
+                  /><br /><br />
+                  <Button data-testid='submit' variant="contained" onClick={handleVerifyOtp}>Verify OTP</Button>
+                </div>
+                <ToastContainer />
+              </div>
+            </Box>
+            <Copyright sx={{ mt: 8, mb: 4 }} />
+          </Container>
+        </ThemeProvider>
+      )}
+    </>
+  );
 };
 
 export default OTPConfirmation;

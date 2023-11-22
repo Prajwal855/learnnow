@@ -1,10 +1,54 @@
-import { Button, Grid, Stack } from '@mui/material';
+import { Button, Grid, InputBase, Stack, alpha, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import logo from "../assets/images/logo-udemy-purple-animation.gif";
 import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
+// import { Search } from '@mui/icons-material';
+
+import SearchIcon from '@mui/icons-material/Search';
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 interface ArticleDataType {
   id: number;
@@ -29,8 +73,15 @@ const Home = () => {
   const fetchListOfArticles = async () => {
     setLoading(true);
     try {
+      
+      const randomWords = [ 'apple','tesla'
+      ];
+
+  
+      const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+  
       const response = await axios.get(
-        "http://localhost:3000/all_articles?language=en"
+        `http://localhost:3000/all_articles?q=${randomWord}`
       );
       setArticleData(response.data.articles);
     } catch (error) {
@@ -40,10 +91,6 @@ const Home = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchListOfArticles();
-  }, []);
 
   const handleLogoutClick = async () => {
     setLoading(true);
@@ -72,6 +119,52 @@ const Home = () => {
       setLoading(false);
     }
   };
+  const [userRole, setUserRole] = useState('');
+
+  const fetchUserRole = async () => {
+    try {
+      const savedAccessToken = localStorage.getItem('AccessToken');
+      if (!savedAccessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await axios.get('http://localhost:3000/user', {
+        headers: {
+          token: savedAccessToken,
+        },
+      });
+
+      const  role  = response.data.user.role; 
+      console.log('i got response for user',response);
+      console.log('i got the role', role);
+      setUserRole(role);
+    } catch (error) {
+      console.error(error);
+      toast.error('Error fetching user role');
+    }
+  };
+
+  useEffect(() => {
+    fetchListOfArticles();
+    fetchUserRole();
+  }, []);
+
+  const isAdminOrTeacher = userRole === 'admin' || userRole === 'teacher';
+
+  const handleCreateCourseClick = async () => {
+    setLoading(true);
+      navigate('/create_course');
+  };
+
+  const handleCreateChapterClick = async () => {
+    setLoading(true);
+      navigate('/create_chapters');
+  };
+
+  const handleCreateStudyMaterialClick = async () => {
+    setLoading(true);
+      navigate('/Create_Study_Material');
+  };
 
   const handleImageClick = (url: string) => {
     // Navigate to the article URL
@@ -87,7 +180,30 @@ const Home = () => {
           <nav>
             <img src={logo} className="nav--icon" />
             <h3 className="nav--logo_text">LEARN NOW</h3>
+            <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
+
             <Stack spacing={2} direction="row">
+              {isAdminOrTeacher && (
+                <>
+                  <Button onClick={handleCreateCourseClick} variant="contained">
+                    Create Course
+                  </Button>
+                  <Button onClick={handleCreateChapterClick} variant="contained">
+                    Create Chapter
+                  </Button>
+                  <Button onClick={handleCreateStudyMaterialClick} variant="contained">
+                    Create Study Material
+                  </Button>
+                </>
+              )}
               <Button onClick={handleLogoutClick} variant="outlined">
                 Logout
               </Button>

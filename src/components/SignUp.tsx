@@ -12,6 +12,7 @@ import '../App.css';
 import Loading from './Loading';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
+import logo from "../assets/images/logo-udemy-purple-animation.gif";
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -21,12 +22,11 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { Grid } from '@mui/material';
-import { Country, State, City }  from 'country-state-city';
+import { Country, State, City } from 'country-state-city';
 import { ICountry, IState, ICity } from 'country-state-city'
-import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
-// import { ICountry, IState, ICity } from 'country-state-city';
 import 'react-phone-input-2/lib/material.css';
 import PhoneInput from 'react-phone-input-2';
+
 
 function Copyright(props: any) {
   return (
@@ -51,7 +51,6 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [role, setRole] = useState<string>('');
   const [gender, setGender] = useState<string>('');
-  const [state, setState] = useState<string>('');
   const [usernameError, setUsernameError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
@@ -60,29 +59,25 @@ const Signup = () => {
   const [roleError, setRoleError] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
 
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [selectedState, setSelectedState] = useState<IState | null>(null);
   const [selectedCity, setSelectedCity] = useState<ICity | null>(null);
 
-  // Get all countries
   const countries = Country.getAllCountries();
 
-  // Event handlers for dropdown changes
   const handleCountryChange = (countryCode: string) => {
     const country = countries.find((c) => c.isoCode === countryCode);
-    setSelectedCountry(country || null); // Use null if country is not found
-    setSelectedState(null); // Reset state when country changes
-    setSelectedCity(null); // Reset city when country changes
+    setSelectedCountry(country || null);
+    setSelectedState(null); 
+    setSelectedCity(null); 
   };
 
   const handleStateChange = (stateCode: string) => {
     const states = State.getStatesOfCountry(selectedCountry?.isoCode || '');
     const state = states.find((s) => s.isoCode === stateCode);
-    setSelectedState(state || null); 
-    setSelectedCity(null); 
+    setSelectedState(state || null);
+    setSelectedCity(null);
   };
 
   const handleCityChange = (cityName: string) => {
@@ -91,7 +86,7 @@ const Signup = () => {
       selectedState?.isoCode || ''
     );
     const city = cities.find((c) => c.name === cityName);
-    setSelectedCity(city || null); 
+    setSelectedCity(city || null);
   };
 
 
@@ -149,7 +144,7 @@ const Signup = () => {
           email: email,
           password: password,
           role: role,
-          phonenumber: '+'+phoneNumber,
+          phonenumber: '+' + phoneNumber,
         },
       });
       toast.success("Account created successfully");
@@ -168,16 +163,23 @@ const Signup = () => {
       {loading ? (
         <Loading />
       ) : (
+
         <ThemeProvider theme={defaultTheme}>
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 2,
+              marginTop: 7,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
             }}
           >
+            <nav className="fixed-navbar">
+              <Link href="/">
+                <img src={logo} className="nav--icon" alt="Learn Now Logo" />
+              </Link>
+              <h3 className="nav--logo_text">LEARN NOW</h3>
+            </nav>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
@@ -212,7 +214,7 @@ const Signup = () => {
                       />
                     </Grid>
                   </Grid>
-                  <br/>
+                  <br />
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       {/* Email */}
@@ -246,7 +248,7 @@ const Signup = () => {
                       />
                     </Grid>
                   </Grid>
-                  <br/>
+                  <br />
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       {/* PhoneNumber */}
@@ -275,7 +277,7 @@ const Signup = () => {
                       />
                     </Grid>
                   </Grid>
-                  <br/>
+                  <br />
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       {/* Gender */}
@@ -305,73 +307,73 @@ const Signup = () => {
                       />
                     </Grid>
                   </Grid>
-                  <br/>
+                  <br />
                   <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <FormControl sx={{ m: 1, minWidth: 200, width: '100%' }} size="small">
-            <InputLabel>Select Country</InputLabel>
-            <Select
-              value={selectedCountry?.isoCode || ''}
-              onChange={(e) => handleCountryChange(e.target.value as string)}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {countries.map((country) => (
-                <MenuItem key={country.isoCode} value={country.isoCode}>
-                  {country.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-  <FormControl sx={{ m: 1, minWidth: 200, width: '100%' }} size="small">
-    <InputLabel>Select State</InputLabel>
-    <Select
-      value={selectedState?.isoCode || ''}
-      onChange={(e) => handleStateChange(e.target.value as string)}
-    >
-      <MenuItem value="">
-        <em>None</em>
-      </MenuItem>
-      {State.getStatesOfCountry(selectedCountry?.isoCode || '').map((state) => (
-        <MenuItem key={state.isoCode} value={state.isoCode}>
-          {state.name}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-</Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl sx={{ m: 1, minWidth: 200, width: '100%' }} size="small">
+                        <InputLabel>Select Country</InputLabel>
+                        <Select
+                          value={selectedCountry?.isoCode || ''}
+                          onChange={(e) => handleCountryChange(e.target.value as string)}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          {countries.map((country) => (
+                            <MenuItem key={country.isoCode} value={country.isoCode}>
+                              {country.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl sx={{ m: 1, minWidth: 200, width: '100%' }} size="small">
+                        <InputLabel>Select State</InputLabel>
+                        <Select
+                          value={selectedState?.isoCode || ''}
+                          onChange={(e) => handleStateChange(e.target.value as string)}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          {State.getStatesOfCountry(selectedCountry?.isoCode || '').map((state) => (
+                            <MenuItem key={state.isoCode} value={state.isoCode}>
+                              {state.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
 
-      </Grid>
-      <br />
-      <Grid container spacing={2}>
-      <Grid item xs={12} sm={6}>
-  <FormControl sx={{ m: 1, minWidth: 200, width: '100%' }} size="small">
-    <InputLabel>Select City</InputLabel>
-    <Select
-      native
-      value={selectedCity?.name || ''}
-      onChange={(e) => handleCityChange(e.target.value as string)}
-    >
-      <option value="">
-       
-      </option>
-      {City.getCitiesOfState(
-        selectedCountry?.isoCode || '',
-        selectedState?.isoCode || '' 
-      ).map((city) => (
-        <option key={city.name} value={city.name}>
-          {city.name}
-        </option>
-      ))}
-    </Select>
-  </FormControl>
-</Grid>
+                  </Grid>
+                  <br />
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl sx={{ m: 1, minWidth: 200, width: '100%' }} size="small">
+                        <InputLabel>Select City</InputLabel>
+                        <Select
+                          native
+                          value={selectedCity?.name || ''}
+                          onChange={(e) => handleCityChange(e.target.value as string)}
+                        >
+                          <option value="">
+
+                          </option>
+                          {City.getCitiesOfState(
+                            selectedCountry?.isoCode || '',
+                            selectedState?.isoCode || ''
+                          ).map((city) => (
+                            <option key={city.name} value={city.name}>
+                              {city.name}
+                            </option>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
 
 
-      
+
                     <Grid item xs={12} sm={6}>
                       {/* Role */}
                       <FormControl sx={{ m: 1, minWidth: 200, width: '100%' }} size="small">
