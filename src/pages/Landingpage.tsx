@@ -1,5 +1,5 @@
 import NavBar from "../components/Navbar";
-import backgroundimageoflandingpage from "../assets/images/online-education-e-learning-open-book-with-laptop-line-connection-low-poly-wireframe-design-abstract-geometric-background-vector-illustration_42421-1166.avif";
+import backgroundimageoflandingpage from "../assets/images/1136394.jpg";
 
 const LandingPage = () => {
   return (
@@ -14,7 +14,6 @@ const LandingPage = () => {
             height: "100vh"
           }}
         >
-          {/* Your content goes here */}
         </div>
       </div>
     </>

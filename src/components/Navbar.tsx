@@ -21,7 +21,7 @@ const NavBar =()=>{
             </Link>
             <h3 className="nav--logo_text">LEARN NOW</h3>
             <Stack spacing={2} direction="row">
-             <Button onClick={handleSignUpClick} variant="outlined">Sign up</Button>
+             <Button onClick={handleSignUpClick} variant="contained">Sign up</Button>
              <Button onClick={handleLoginClick} variant="contained">Login</Button>
              </Stack>
         </nav>

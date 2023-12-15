@@ -50,7 +50,8 @@ const OTPConfirmation: React.FC = () => {
         },
         {
           headers: {
-            token: `${savedAccessToken}`,
+            'Content-Type': 'application/json',
+            'token': `${savedAccessToken}`,
           },
         }
       );

@@ -62,7 +62,6 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       }
     });
     console.log("i got response", response);
-    // toast.success("Login Successful");
     navigate('/Home');
     localStorage.setItem("AccessToken", response.data.meta.token);
   } catch (error : any) {

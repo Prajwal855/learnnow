@@ -9,6 +9,10 @@ import Home from './components/Home';
 import Course from './components/Course';
 import Chapter from './components/Chapters';
 import StudyMaterials from './components/StudyMaterils';
+import ChaptersList from './components/ChaptersList';
+import QuizForm from './components/QuizForm';
+import QuizQuestions from './components/QuizQuestions';
+import Result from './components/Result';
 
 function App() {
   return (
@@ -22,6 +26,10 @@ function App() {
       <Route path='/create_chapters' element={<Chapter/>}/>
       <Route path='/Create_Study_Material' element={<StudyMaterials/>}/>
       <Route path='/Home' element={<Home/>}/>
+      <Route path='/chapters' element={<ChaptersList/>}/>
+      <Route path='/Quiz_form' element={<QuizForm/>}/>
+      <Route path='/Quiz' element={<QuizQuestions/>}/>
+      <Route path='/Result' element={<Result/>}/>
     </Routes>
   );
 }

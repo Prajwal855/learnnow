@@ -14,7 +14,6 @@ const Chapter = () => {
 
     const [coursesId, setCoursesId] = useState<string>('');
     const [coursesOptions, setCoursesOptions] = useState<Array<{ id: string; modul: string }>>([]);
-    const navigate = useNavigate()
 
     useEffect(() => {
         const savedAccessToken = localStorage.getItem("AccessToken");
