@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import backgroundimageoflandingpage from "../assets/images/giphy.gif";
 import { Button, Typography } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import axios from "axios";
@@ -49,6 +50,8 @@ const Result: React.FC = () => {
   };
 
   return (
+    <>
+    <div >
     <div className="App">
       <h1>Your Results!</h1>
       <div>
@@ -86,6 +89,8 @@ const Result: React.FC = () => {
         </Button>
       </div>
     </div>
+    </div>
+    </>
   );
 };
 

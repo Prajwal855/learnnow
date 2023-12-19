@@ -193,6 +193,8 @@ const Home = () => {
             </IconButton>
             <img src={logo} className="nav--icon" />
             <h3 className="nav--logo_text">LEARN NOW</h3>
+
+            <Stack spacing={2} direction="row">
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -202,8 +204,6 @@ const Home = () => {
                 inputProps={{ 'aria-label': 'search' }}
               />
             </Search>
-
-            <Stack spacing={2} direction="row">
               {isAdminOrTeacher ? (
                 <>
                   <Button onClick={handleCreateCourseClick} variant="contained">
@@ -227,12 +227,7 @@ const Home = () => {
             </Stack>
 
           </nav>
-          <div style={{
-            backgroundImage: `url(${backgroundimageoflandingpage})`, 
-            backgroundSize: "cover", 
-            backgroundPosition: "center", 
-            
-          }}>
+          <div>
           <SideMenu isOpen={isSidebarOpen} toggleDrawer={toggleDrawer} />
           <br /><br /><br />
           <Grid container justifyContent="center" spacing={2}>

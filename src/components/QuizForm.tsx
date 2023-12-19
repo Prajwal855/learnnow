@@ -1,4 +1,5 @@
 import { Alert, Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import backgroundimageoflandingpage from "../assets/images/superman-flying-high-towards-the-sky-1ebvsa7hxx9fil86.gif";
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,7 +32,7 @@ const QuizForm = () => {
             navigate('/Quiz');
             setLoading(true);
           } catch (error) {
-            toast.error('Unable to create activity');
+            toast.error('Unable to take Quiz');
           } finally {
             setLoading(false);
           }
@@ -51,12 +52,12 @@ const QuizForm = () => {
               <h3 className="nav--logo_text">LEARN NOW</h3>
             </nav>
             <div>
-            <br/><br/><br/><br/><br/><br/><br/><br/>
-            <Alert severity="info" style={{ textAlign: 'left', width: '40%', backgroundBlendMode:'inherit' }}>
+            <br/><br/><br/><br/><br/><br/>
+            <Alert severity="info" style={{ textAlign: 'left', width: '50%', height:'75%', backgroundBlendMode:'inherit' }}>
                 <strong>Quiz Instructions:</strong>
                 <li>This quiz consists of 25 questions.</li>
                 <li>Each question is multiple-choice, with one correct answer.</li>
-                <li>You have a total of 30 minutes to complete the quiz.</li>
+                <li>You have a total of 15 minutes to complete the quiz.</li>
                 <li>Ensure you submit your answers before the timer runs out.</li>
                 <li>Points are awarded for each correct answer, and there is no penalty for incorrect answers.</li>
                 <li>Review your answers before submitting to maximize your score.</li>
@@ -97,10 +98,11 @@ const QuizForm = () => {
                         <MenuItem value={'Ruby'}>Ruby</MenuItem>
                         <MenuItem value={'ReactNative'}>React Native</MenuItem>
                         <MenuItem value={'ReactJS'}>React JS</MenuItem>
+                        <MenuItem value={'ManualQA'}>Manual QA</MenuItem>
                     </Select>
                 </FormControl>
-                <br/><br/><br/>
-                <Button data-testid='submit' variant="contained" type="submit" disabled={!difficult||!language} onClick={handleSubmit}>Take Test</Button>
+                <br/><br/><br/><br/>
+                <Button style={{ marginLeft: '4%',marginBottom:'20px'}} data-testid='submit' variant="contained" type="submit" disabled={!difficult||!language} onClick={handleSubmit}>Take Test</Button>
             </form>
             <ToastContainer />
             </div>
