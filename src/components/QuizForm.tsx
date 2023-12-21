@@ -1,11 +1,10 @@
 import { Alert, Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import backgroundimageoflandingpage from "../assets/images/superman-flying-high-towards-the-sky-1ebvsa7hxx9fil86.gif";
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
 
 
 const QuizForm = () => {
@@ -68,6 +67,23 @@ const QuizForm = () => {
             </Alert>
             <br/><br/><br/><br/>
             <form style={{marginLeft:"5%"}} onSubmit={handleSubmit}>
+              <br/>
+            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                    <InputLabel id="demo-simple-select-label">Language</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        placeholder="language-type"
+                        value={language}
+                        label="Language"
+                        onChange={(e)=>setLanguage(e.target.value)}
+                    >
+                        <MenuItem value={'Ruby'}>Ruby</MenuItem>
+                        <MenuItem value={'ReactNative'}>React Native</MenuItem>
+                        <MenuItem value={'ReactJS'}>React JS</MenuItem>
+                        <MenuItem value={'ManualQA'}>Manual QA</MenuItem>
+                    </Select>
+                </FormControl>
                 <br/>
                 <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                     <InputLabel id="demo-simple-select-label">Level</InputLabel>
@@ -84,23 +100,7 @@ const QuizForm = () => {
                         <MenuItem value={'level3'}>Level 3</MenuItem>
                     </Select>
                 </FormControl>
-                <br/>
-                <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                    <InputLabel id="demo-simple-select-label">Language</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        placeholder="language-type"
-                        value={language}
-                        label="Language"
-                        onChange={(e)=>setLanguage(e.target.value)}
-                    >
-                        <MenuItem value={'Ruby'}>Ruby</MenuItem>
-                        <MenuItem value={'ReactNative'}>React Native</MenuItem>
-                        <MenuItem value={'ReactJS'}>React JS</MenuItem>
-                        <MenuItem value={'ManualQA'}>Manual QA</MenuItem>
-                    </Select>
-                </FormControl>
+              
                 <br/><br/><br/><br/>
                 <Button style={{ marginLeft: '4%',marginBottom:'20px'}} data-testid='submit' variant="contained" type="submit" disabled={!difficult||!language} onClick={handleSubmit}>Take Test</Button>
             </form>

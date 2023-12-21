@@ -2,11 +2,15 @@ import { Button, Grid, IconButton, InputBase, Stack, alpha, styled } from '@mui/
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
+import courseImage from '../assets/images/courseimage.jpg';
+import CreateQuiz from '../assets/images/create_quiz.jpeg';
+import createstudymaterial from '../assets/images/Create_studyMaterial.jpg';
+import createChapter from '../assets/images/createchap.jpg';
+import Quiz from '../assets/images/quiztime.png';
 import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import DehazeIcon from '@mui/icons-material/Dehaze';
-import backgroundimageoflandingpage from "../assets/images/paper-1074131_1280.jpg";
 import SearchIcon from '@mui/icons-material/Search';
 import SideMenu from './SideMenu';
 
@@ -162,6 +166,11 @@ const Home = () => {
     navigate('/create_course');
   };
 
+  const handleCreateQuestionsClick = async () => {
+    setLoading(true);
+    navigate('/create_questions');
+  };
+
   const handleTakeQuizClick = async () => {
     setLoading(true);
     navigate('/Quiz_form');
@@ -204,19 +213,7 @@ const Home = () => {
                 inputProps={{ 'aria-label': 'search' }}
               />
             </Search>
-              {isAdminOrTeacher ? (
-                <>
-                  <Button onClick={handleCreateCourseClick} variant="contained">
-                    Create Course
-                  </Button>
-                  <Button onClick={handleCreateChapterClick} variant="contained">
-                    Create Chapter
-                  </Button>
-                  <Button onClick={handleCreateStudyMaterialClick} variant="contained">
-                    Create Study Material
-                  </Button>
-                </>
-              ) : (
+            {userRole === 'student' && (
                 <Button onClick={handleTakeQuizClick} variant="contained">
                   Take Quiz
                 </Button>
@@ -228,25 +225,69 @@ const Home = () => {
 
           </nav>
           <div>
-          <SideMenu isOpen={isSidebarOpen} toggleDrawer={toggleDrawer} />
-          <br /><br /><br />
-          <Grid container justifyContent="center" spacing={2}>
-            {articleData.map((item) => (
-              <Grid key={item.id} item xs={12} sm={6} md={4} lg={3} onClick={() => handleImageClick(item.url)}>
-                <h2>{item.title}</h2>
-                <div style={{ textAlign: 'center', cursor: 'pointer' }}>
-                  <img
-                    src={item.urlToImage}
-                    alt={item.title}
-                    style={{ width: '100%', height: 'auto' }}
-                  />
-                  <p>{item.description}</p>
-                </div>
-              </Grid>
-            ))}
-          </Grid>
+            <SideMenu isOpen={isSidebarOpen} toggleDrawer={toggleDrawer} />
+            <br /><br /><br />
+            <Grid container justifyContent="center" spacing={2}>
+              {isAdminOrTeacher ? (
+                <>
+                  <Grid item xs={12} md={9}>
+                    <Grid container spacing={2}>
+                      {articleData.slice(0, 8).map((item) => (
+                        <Grid key={item.id} item xs={12} sm={6} md={3} lg={3} onClick={() => handleImageClick(item.url)}>
+                          <h2>{item.title}</h2>
+                          <div style={{ textAlign: 'center', cursor: 'pointer' }}>
+                            <img
+                              src={item.urlToImage}
+                              alt={item.title}
+                              style={{ width: '100%', height: 'auto' }}
+                            />
+                            <p>{item.description}</p>
+                          </div>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} md={3}>
+                    <Stack spacing={2}>
+                      <div style={{ textAlign: 'center', cursor: 'pointer' }} onClick={handleCreateCourseClick}>
+                    <img src={courseImage} alt="create Course" style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                    <div style={{ textAlign: 'center', cursor: 'pointer' }} onClick={handleCreateChapterClick}>
+                      <img src={createChapter} alt="create chapter" style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                    <div style={{ textAlign: 'center', cursor: 'pointer' }} onClick={handleCreateStudyMaterialClick}>
+                      <img src={createstudymaterial} alt="create study material" style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                    <div style={{ textAlign: 'center', cursor: 'pointer' }} onClick={handleCreateQuestionsClick}>
+                      <img src={CreateQuiz} alt="create quiz" style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                    </Stack>
+                  </Grid>
+                </>
+              ) : (
+                <>
 
-        </div>
+                  <Grid item xs={12} md={12}>
+                    <Grid container spacing={2}>
+                      {articleData.slice(0, 12).map((item) => (
+                        <Grid key={item.id} item xs={12} sm={6} md={4} lg={3} onClick={() => handleImageClick(item.url)}>
+                          <h2>{item.title}</h2>
+                          <div style={{ textAlign: 'center', cursor: 'pointer' }}>
+                            <img
+                              src={item.urlToImage}
+                              alt={item.title}
+                              style={{ width: '100%', height: 'auto' }}
+                            />
+                            <p>{item.description}</p>
+                          </div>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </div>
         </div>
       )}
     </>

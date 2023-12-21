@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Loading from './Loading';
@@ -13,13 +13,10 @@ import {
     Select,
     ThemeProvider,
     createTheme,
-    Grid,
     TextareaAutosize,
-
-
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
 
 const defaultTheme = createTheme();
 

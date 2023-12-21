@@ -1,6 +1,7 @@
+import { useState, useRef } from 'react';
 import { Button, TextField } from '@mui/material';
+import styled from 'styled-components';
 import axios from 'axios';
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Loading from './Loading';
@@ -12,7 +13,20 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
+
+const defaultTheme = createTheme();
+
+const StyledOTPInput = styled(TextField)`
+  && {
+    width: 3em;
+    margin: 0 0.2em;
+    input {
+      text-align: center;
+      font-size: 1.5em;
+    }
+  }
+`;
 
 function Copyright(props: any) {
   return (
@@ -27,46 +41,52 @@ function Copyright(props: any) {
   );
 }
 
-const defaultTheme = createTheme();
-
 const OTPConfirmation: React.FC = () => {
   const [otp, setOtp] = useState<string>('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(null));
 
-  const handleOtpChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOtp(event.target.value);
+  const handleOtpChange = (index: number, value: string) => {
+    setOtp((prevOtp) => {
+      const newOtp = prevOtp.split('');
+      newOtp[index] = value;
+      if (value !== '' && index < inputRefs.current.length - 1) {
+        inputRefs.current[index + 1]?.focus();
+      }
+
+      return newOtp.join('');
+    });
   };
 
-  const handleVerifyOtp = async (e: any) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
-      const savedAccessToken = localStorage.getItem("AccessToken");
+      const savedAccessToken = localStorage.getItem('AccessToken');
       const response = await axios.post(
-        "http://localhost:3000/users/sms_confirmation",
+        'http://localhost:3000/users/sms_confirmation',
         {
           pin: otp,
         },
         {
           headers: {
             'Content-Type': 'application/json',
-            'token': `${savedAccessToken}`,
+            token: `${savedAccessToken}`,
           },
         }
       );
-
-      toast.success("OTP Verified");
-      console.log("i got response", response);
+      console.log('i got response', response);
 
       const userRole = response.data.user.role;
       if (userRole === 'admin' || userRole === 'student') {
-        navigate("/login");
+        navigate('/login');
       } else if (userRole === 'teacher') {
-        navigate("/create_academics");
+        navigate('/create_academics');
       }
     } catch (error) {
-      toast.error("Wrong OTP");
+      toast.error('Wrong OTP');
     } finally {
       setLoading(false);
     }
@@ -91,23 +111,37 @@ const OTPConfirmation: React.FC = () => {
               <nav className="fixed-navbar">
                 <Link href="/">
                   <img src={logo} className="nav--icon" alt="Learn Now Logo" />
-              </Link>
-              <h3 className="nav--logo_text">LEARN NOW</h3>
+                </Link>
+                <h3 className="nav--logo_text">LEARN NOW</h3>
               </nav>
               <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
-              <div className='App'>
-                <h2 className='otp_text'>OTP Confirmation</h2>
-                <p className='description_text'>Please enter the OTP sent to your registered phone number.</p>
+              <div className="App">
+                <h2 className="otp_text">OTP Confirmation</h2>
+                <p className="description_text">
+                  Please enter the OTP sent to your registered phone number.
+                </p>
                 <div>
-                  <TextField id="filled-hidden-label-normal"
-                    defaultValue="" label="OTP" variant="filled"
-                    placeholder="Enter OTP"
-                    value={otp}
-                    onChange={handleOtpChange}
-                  /><br /><br />
-                  <Button data-testid='submit' variant="contained" onClick={handleVerifyOtp}>Verify OTP</Button>
+                  {/* Use multiple OTP input fields */}
+                  {Array.from({ length: 6 }, (_, index) => (
+                    <StyledOTPInput
+                      key={index}
+                      inputRef={(ref) => (inputRefs.current[index] = ref)}
+                      id={`otp-input-${index}`}
+                      label=""
+                      variant="outlined"
+                      type="tel"
+                      inputProps={{ maxLength: 1 }}
+                      value={otp[index] || ''}
+                      onChange={(e) => handleOtpChange(index, e.target.value)}
+                    />
+                  ))}
+                  <br />
+                  <br />
+                  <Button data-testid="submit" variant="contained" onClick={handleVerifyOtp}>
+                    Verify OTP
+                  </Button>
                 </div>
                 <ToastContainer />
               </div>

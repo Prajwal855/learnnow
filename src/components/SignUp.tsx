@@ -12,7 +12,7 @@ import '../App.css';
 import Loading from './Loading';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from "../assets/images/logo-gif.gif";
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -46,15 +46,19 @@ const defaultTheme = createTheme();
 const Signup = () => {
   const [email, setEmail] = useState<string>('');
   const [username, setUserName] = useState<string>('');
+  const [lastname, setLastName] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
   const [role, setRole] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [usernameError, setUsernameError] = useState<boolean>(false);
+  const [lastnameError, setlastnameError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [addressError, setAddressError] = useState<boolean>(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(false);
   const [roleError, setRoleError] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -102,6 +106,11 @@ const Signup = () => {
     setUsernameError(false);
     setError('');
   };
+  const handleLastnameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLastName(event.target.value);
+    setlastnameError(false);
+    setError('');
+  };
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
     setPasswordError(false);
@@ -111,6 +120,12 @@ const Signup = () => {
   const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(event.target.value);
     setConfirmPasswordError(false);
+    setError('');
+  };
+
+  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(event.target.value);
+    setAddressError(false);
     setError('');
   };
 
@@ -194,10 +209,10 @@ const Signup = () => {
                         id="filled-hidden-label-normal"
                         defaultValue=""
                         label="First Name"
-                        variant="filled"
+                        variant="outlined"
                         value={username}
                         onChange={handleUsernameChange}
-                        placeholder="Enter Your Name"
+                        placeholder="Enter Your First Name"
                         error={usernameError}
                         helperText={usernameError ? 'Username is required' : ''}
                         sx={{ width: '100%' }}
@@ -209,7 +224,12 @@ const Signup = () => {
                         id="filled-hidden-label-normal"
                         defaultValue=""
                         label="Last Name"
-                        variant="filled"
+                        variant="outlined"
+                        placeholder="Enter Your Last Name"
+                        value={lastname}
+                        onChange={handleLastnameChange}
+                        error={lastnameError}
+                        helperText={lastnameError ? 'Username is required' : ''}
                         sx={{ width: '100%' }}
                       />
                     </Grid>
@@ -222,7 +242,7 @@ const Signup = () => {
                         id="filled-hidden-label-normal"
                         defaultValue=""
                         label="Email"
-                        variant="filled"
+                        variant="outlined"
                         value={email}
                         onChange={handleEmailChange}
                         placeholder="Enter Your Email"
@@ -238,7 +258,7 @@ const Signup = () => {
                         type="password"
                         defaultValue=""
                         label="Password"
-                        variant="filled"
+                        variant="outlined"
                         value={password}
                         onChange={handlePasswordChange}
                         placeholder="Enter Your Password"
@@ -267,7 +287,7 @@ const Signup = () => {
                         type="password"
                         defaultValue=""
                         label="Confirm Password"
-                        variant="filled"
+                        variant="outlined"
                         value={confirmPassword}
                         onChange={handleConfirmPasswordChange}
                         placeholder="Enter Your Password"
@@ -297,12 +317,16 @@ const Signup = () => {
                       </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {/* Address */}
                       <TextField
                         id="filled-hidden-label-normal"
                         defaultValue=""
                         label="Address"
-                        variant="filled"
+                        variant="outlined"
+                        value={address}
+                        onChange={handleAddressChange}
+                        placeholder="Enter Your Address"
+                        error={addressError}
+                        helperText={addressError ? "Password doesn't match" : ''}
                         sx={{ width: '100%' }}
                       />
                     </Grid>
@@ -399,7 +423,7 @@ const Signup = () => {
                     data-testid="submit"
                     variant="contained"
                     type="submit"
-                    disabled={!username || !email || !phoneNumber || !role || !password}
+                    disabled={!username || !email || !phoneNumber || !role || !password ||!lastname ||!confirmPassword||!selectedCountry||!selectedCity||!selectedState}
                     onClick={handleSubmit}
                     sx={{ width: '100%' }}
                   >

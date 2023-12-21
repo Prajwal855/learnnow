@@ -15,7 +15,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import { Grid } from '@mui/material';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
 
 function Copyright(props: any) {
   return (

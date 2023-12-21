@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Loading from './Loading';
 import { Box, Button, CssBaseline, FormControl, InputLabel, MenuItem, Select, TextField, ThemeProvider, createTheme } from '@mui/material';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
 
 const defaultTheme = createTheme();
 
@@ -135,10 +135,11 @@ const Course = () => {
                                 </FormControl>
                                 <br />
                                 <TextField id="filled-hidden-label-normal"
-                                    defaultValue="" label="Course Name" variant="filled"
+                                    defaultValue="" label="Course Name" variant="outlined"
                                     placeholder="Enter the Course Name"
                                     value={courseName}
                                     onChange={handleCourseChange}
+                                    style={{marginLeft:'10px'}}
                                 /><br /><br />
                                 <Button data-testid='submit' variant="contained" onClick={handleCourseSubmit}>Create Course</Button>
                             </div>

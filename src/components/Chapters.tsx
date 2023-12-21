@@ -4,16 +4,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Loading from './Loading';
 import { Box, Button, CssBaseline, FormControl, InputLabel, MenuItem, Select, TextField, ThemeProvider, createTheme } from '@mui/material';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
 
 const defaultTheme = createTheme();
 
 const Chapter = () => {
     const [chapterName, setChapterName] = useState<string>('');
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate()
     const [coursesId, setCoursesId] = useState<string>('');
-    const [coursesOptions, setCoursesOptions] = useState<Array<{ id: string; modul: string }>>([]);
+    const [coursesOptions, setCoursesOptions] = useState<Array<{ id: string; name: string }>>([]);
 
     useEffect(() => {
         const savedAccessToken = localStorage.getItem("AccessToken");
@@ -53,6 +53,7 @@ const Chapter = () => {
                 },
             });
             toast.success("Chapter Created");
+            navigate('/Create_Study_Material');
             console.log("i got response", response)
         } catch (error) {
             toast.error("Chapter unable to create");
@@ -96,17 +97,18 @@ const Chapter = () => {
                                         fullWidth
                                     >
                                         {coursesOptions.map(option => (
-                                            <MenuItem key={option.id} value={option.id}>{option.modul}</MenuItem>
+                                            <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                                 <br />
                                 <br />
                                 <TextField id="filled-hidden-label-normal"
-                                    defaultValue="" label="Chapter Name" variant="filled"
+                                    defaultValue="" label="Chapter Name" variant="outlined"
                                     placeholder="Enter the Chapter Name"
                                     value={chapterName}
                                     onChange={handleChapterChange}
+                                    style={{marginLeft:'10px'}}
                                 /><br /><br />
                                 <Button data-testid='submit' variant="contained" onClick={handleChapterSubmit}>Create Chapter</Button>
                             </div>

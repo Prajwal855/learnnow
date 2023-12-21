@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Loading from './Loading';
@@ -11,10 +11,9 @@ import {
   Grid,
   IconButton,
   ThemeProvider,
-  Typography,
   createTheme,
 } from '@mui/material';
-import logo from '../assets/images/logo-udemy-purple-animation.gif';
+import logo from '../assets/images/logo-gif.gif';
 import SideMenu from './SideMenu';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 
@@ -22,7 +21,7 @@ const defaultTheme = createTheme();
 
 
 const ChaptersList = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [chaptersOptions, setChaptersOptions] = useState<Array<{ id: string; chap: string }>>([]);
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
@@ -40,10 +39,12 @@ const ChaptersList = () => {
             },
         })
         .then((response) => {
+            setLoading(false);
             setChaptersOptions(response.data.chapters);
             console.log("Chapters", response.data.chapters);
         })
         .catch((error) => {
+            setLoading(false);
             console.error("Error fetching Categories options", error);
         });
 }, []);

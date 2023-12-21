@@ -1,9 +1,4 @@
-import backgroundimageoflandingpage from "../assets/images/paper-1074131_1280.jpg";
-import {
-  useEffect,
-  useState,
-} from 'react';
-import "../assets/styles/Home.css";
+import { useEffect, useState, useRef } from 'react';
 import {
   FormControl,
   FormControlLabel,
@@ -13,15 +8,17 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/images/logo-gif.gif';
+import "../assets/styles/Home.css";
 
 const QuizQuestions = () => {
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<{ [key: string]: string }>({});
-  const [remainingTime, setRemainingTime] = useState(15 * 60); 
+  const [remainingTime, setRemainingTime] = useState(15 * 60);
   const navigate = useNavigate();
+  const questionContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const respQuestions = localStorage.getItem('Questions');
@@ -82,38 +79,50 @@ const QuizQuestions = () => {
   const minutes = Math.floor(remainingTime / 60);
   const seconds = remainingTime % 60;
 
-  return (
-    <div>
-        <nav className="fixed-navbar">
-          <Link to="/Home">
-            <img src={logo} className="nav--icon" alt="Learn Now Logo" />
-          </Link>
-          <h3 className="nav--logo_text">LEARN NOW</h3>
-          <div style={{ marginTop:'1%',textAlign: 'right' }}>
-            {`Time Remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}
-          </div>
-        </nav>
-        <div>
-        <div style={{ display: 'flex', marginTop: '5%' }}>
+  const scrollToQuestion = () => {
+    if (questionContainerRef.current) {
+      questionContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
+  return (
+    <div style={{ position: 'relative' }}>
+      <nav className="fixed-navbar">
+        <Link to="/Home">
+          <img src={logo} className="nav--icon" alt="Learn Now Logo" />
+        </Link>
+        <h3 className="nav--logo_text">LEARN NOW</h3>
+        <div style={{ marginTop: '1%', textAlign: 'right' }}>
+          {`Time Remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}
+        </div>
+      </nav>
+      <div>
+        <div style={{ display: 'flex', marginTop: '5%' }}>
           <div className="sidebar">
             {questions.map((_, index) => (
               <div
                 key={index}
                 className={`sidebar-item ${index === currentQuestionIndex ? 'active' : ''} ${userAnswers[questions[index].id] ? 'answered' : ''}`}
-                onClick={() => setCurrentQuestionIndex(index)}
+                onClick={() => {
+                  setCurrentQuestionIndex(index);
+                  scrollToQuestion();
+                }}
               >
                 {index + 1}
               </div>
             ))}
           </div>
-         
-          <div style={{ marginTop: '5%', marginLeft: '5%' }}>
+          <div
+            ref={questionContainerRef}
+            style={{ marginTop: '5%', marginLeft: '5%', minHeight: '400px', display: 'flex', flexDirection: 'column' }}
+          >
             <FormControl>
-              <FormLabel><Typography style={{color:'black' ,fontWeight:700, fontSize:'20px'}}>{`Question ${currentQuestionIndex + 1}: ${currentQuestion.que}`}</Typography></FormLabel>
+              <FormLabel>
+                <Typography style={{ color: 'black', fontWeight: 700, fontSize: '20px' }}>{`Question ${currentQuestionIndex + 1}: ${currentQuestion.que}`}</Typography>
+              </FormLabel>
               <RadioGroup name={`question-${questionId}`} value={userAnswer}>
                 {currentQuestion.choices?.map((choice: any, index: any) => (
-                  <FormControlLabel style={{marginLeft:'12%',fontSize:'15px'}}
+                  <FormControlLabel style={{ marginLeft: '12%', fontSize: '15px' }}
                     key={choice.id}
                     value={choice.id.toString()}
                     control={<Radio data-testid={`mcq-${index}`} />}
@@ -123,26 +132,26 @@ const QuizQuestions = () => {
                 ))}
               </RadioGroup>
             </FormControl>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop:'10%' }}>
-            {currentQuestionIndex > 0 && (
-                <Button style={{ marginBottom: '10px', marginRight: '30px' }} variant="contained" color="primary" onClick={handlePreviousQuestion}>
-                Previous
+            <div style={{ position: 'absolute', bottom: '10px', left: 70, right: 10, display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
+              {currentQuestionIndex > 0 && (
+                <Button variant="contained" color="primary" onClick={handlePreviousQuestion}>
+                  Previous
                 </Button>
-            )}
-            {currentQuestionIndex < questions.length - 1 ? (
-                <Button style={{ marginBottom: '10px' }} variant="contained" color="primary" onClick={handleNextQuestion}>
-                Next
+              )}
+              {currentQuestionIndex < questions.length - 1 ? (
+                <Button variant="contained" color="primary" onClick={handleNextQuestion}>
+                  Next
                 </Button>
-            ) : (
-                <Button style={{ marginBottom: '10px' }} variant="contained" color="primary" onClick={handleFinishQuiz}>
-                Finish Quiz
+              ) : (
+                <Button variant="contained" color="primary" onClick={handleFinishQuiz}>
+                  Finish Quiz
                 </Button>
-            )}
+              )}
             </div>
-            </div >
-            </div>
+          </div>
         </div>
       </div>
+    </div>
   );
 };
 

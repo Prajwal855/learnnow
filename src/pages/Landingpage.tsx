@@ -25,9 +25,12 @@ const LandingPage = () => {
 
   const fetchListOfArticles = async () => {
     setLoading(true);
+
     try {
+      const randomWords = ['apple', 'tesla' ];
+      const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
       const response = await axios.get(
-        `http://localhost:3000/all_articles?q=tesla&from=2023-11-19&sortBy=publishedAt`
+        `http://localhost:3000/all_articles?q=${randomWord}`
       );
       setArticleData(response.data.articles);
     } catch (error) {

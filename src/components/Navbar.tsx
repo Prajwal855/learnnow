@@ -1,5 +1,5 @@
 import "../assets/styles/Home.css";
-import logo from "../assets/images/logo-udemy-purple-animation.gif";
+import logo from '../assets/images/logo-gif.gif';
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { Link, useNavigate } from "react-router-dom";

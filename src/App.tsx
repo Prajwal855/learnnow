@@ -13,12 +13,14 @@ import ChaptersList from './components/ChaptersList';
 import QuizForm from './components/QuizForm';
 import QuizQuestions from './components/QuizQuestions';
 import Result from './components/Result';
+import CourseList from './components/CoursesList';
+import Questions from './components/Questions';
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<LandingPage/>}/>
-      <Route path = '/signup' element = {<Signup/>}/>
+      <Route path='/signup' element = {<Signup/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/otp_confirmation' element={<OTPConfirmation/>}/>
       <Route path='/create_academics' element={<Academics/>}/>
@@ -27,9 +29,11 @@ function App() {
       <Route path='/Create_Study_Material' element={<StudyMaterials/>}/>
       <Route path='/Home' element={<Home/>}/>
       <Route path='/chapters' element={<ChaptersList/>}/>
+      <Route path='/courses' element={<CourseList/>}/>
       <Route path='/Quiz_form' element={<QuizForm/>}/>
       <Route path='/Quiz' element={<QuizQuestions/>}/>
       <Route path='/Result' element={<Result/>}/>
+      <Route path='/create_questions' element={<Questions/>}/>
     </Routes>
   );
 }

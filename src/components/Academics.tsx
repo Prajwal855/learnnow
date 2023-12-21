@@ -1,9 +1,10 @@
-import { Alert, Box, Button, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, ToggleButton } from "@mui/material";
-import CheckIcon from '@mui/icons-material/Check';
+import { Box, Button, FormControlLabel, InputLabel, MenuItem, Select, TextField, Checkbox } from "@mui/material";
+import logo from '../assets/images/logo-gif.gif';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
+import Link from '@mui/material/Link';
+import { toast } from 'react-toastify';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import 'react-toastify/dist/ReactToastify.css';
 import "../App.css"
@@ -47,8 +48,8 @@ const Academics = () => {
             })
             .then((response) => {
                 setInterestOptions(response.data.intrests);
-                console.log("Intrests",response.data.intrests);
-            })            
+                console.log("Intrests", response.data.intrests);
+            })
             .catch((error) => {
                 console.error("Error fetching interest options", error);
             });
@@ -61,7 +62,7 @@ const Academics = () => {
             })
             .then((response) => {
                 setQualificationOptions(response.data.qualifications);
-                console.log("qualifications",response.data.qualifications);
+                console.log("qualifications", response.data.qualifications);
             })
             .catch((error) => {
                 console.error("Error fetching qualification options", error);
@@ -106,11 +107,11 @@ const Academics = () => {
     const handleCVChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files && files.length > 0) {
-          setCV(files[0]);
-          setCVFileName(files[0].name); 
-          setError("");
+            setCV(files[0]);
+            setCVFileName(files[0].name);
+            setError("");
         }
-      };
+    };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -132,10 +133,10 @@ const Academics = () => {
             if (typeof availability !== 'boolean') {
                 formData.append('availability', availability);
             }
-            formData.append('governament_id', governamentId as File);  
+            formData.append('governament_id', governamentId as File);
             formData.append('experiance', experiance);
-            formData.append('cv', cv as File);  
-            
+            formData.append('cv', cv as File);
+
             const response = await axios.post('http://localhost:3000/academics', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -160,7 +161,7 @@ const Academics = () => {
             !careerGoals ||
             !language ||
             (!currentlyWorking && !availability) ||
-            !experiance 
+            !experiance
         );
     };
 
@@ -176,6 +177,12 @@ const Academics = () => {
                         alignItems: 'center',
                     }}
                 >
+                <nav className="fixed-navbar">
+                <Link href="/">
+                  <img src={logo} className="nav--icon" alt="Learn Now Logo" />
+                </Link>
+                <h3 className="nav--logo_text">LEARN NOW</h3>
+              </nav>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <div className="App">
                             <h1 className="tital_text">Academics Form</h1>
@@ -215,7 +222,8 @@ const Academics = () => {
                                         <TextField
                                             id="collegeName"
                                             label="College Name"
-                                            variant="filled"
+                                            variant="outlined"
+                                            placeholder="Enter Your Collage Name"
                                             value={collegeName}
                                             onChange={handleCollageNameChange}
                                             fullWidth
@@ -226,7 +234,8 @@ const Academics = () => {
                                         <TextField
                                             id="careerGoals"
                                             label="Career Goals"
-                                            variant="filled"
+                                            variant="outlined"
+                                            placeholder="Enter Your carrer Goals"
                                             value={careerGoals}
                                             onChange={handleCareerGoalsChange}
                                             fullWidth
@@ -237,7 +246,8 @@ const Academics = () => {
                                         <TextField
                                             id="language"
                                             label="Language"
-                                            variant="filled"
+                                            variant="outlined"
+                                            placeholder="Enter Your Language"
                                             value={language}
                                             onChange={handleLanguageChange}
                                             fullWidth
@@ -248,7 +258,8 @@ const Academics = () => {
                                         <TextField
                                             id="otherLanguage"
                                             label="Other Language"
-                                            variant="filled"
+                                            variant="outlined"
+                                            placeholder="Enter Other Languages"
                                             value={otherLanguage || ''}
                                             onChange={handleOtherLanguageChange}
                                             fullWidth
@@ -259,7 +270,8 @@ const Academics = () => {
                                         <TextField
                                             id="specialization"
                                             label="Specialization"
-                                            variant="filled"
+                                            variant="outlined"
+                                            placeholder="Enter your specialization"
                                             value={specialization || ''}
                                             onChange={handleSpecializationChange}
                                             fullWidth
@@ -269,7 +281,8 @@ const Academics = () => {
                                         <TextField
                                             id="experience"
                                             label="Experience"
-                                            variant="filled"
+                                            variant="outlined"
+                                            placeholder="Enter your Experience"
                                             value={experiance || ''}
                                             onChange={handleExperianceChange}
                                             fullWidth
@@ -279,15 +292,13 @@ const Academics = () => {
                                     <Grid item xs={6}>
                                         <FormControlLabel
                                             control={
-                                                <ToggleButton
-                                                    value="check"
-                                                    selected={currentlyWorking}
+                                                <Checkbox
+                                                    checked={currentlyWorking}
                                                     onChange={() => {
                                                         setCurrentlyWorking(!currentlyWorking);
                                                     }}
-                                                >
-                                                    <CheckIcon />
-                                                </ToggleButton>
+                                                    value="currentlyWorking"
+                                                />
                                             }
                                             label={<span style={{ color: 'black' }}>Currently Working</span>}
                                         />
@@ -296,15 +307,13 @@ const Academics = () => {
                                     <Grid item xs={6}>
                                         <FormControlLabel
                                             control={
-                                                <ToggleButton
-                                                    value="check"
-                                                    selected={availability}
+                                                <Checkbox
+                                                    checked={availability}
                                                     onChange={() => {
                                                         setAvailability(!availability);
                                                     }}
-                                                >
-                                                    <CheckIcon />
-                                                </ToggleButton>
+                                                    value="availability"
+                                                />
                                             }
                                             label={<span style={{ color: 'black' }}>Availability</span>}
                                         />
@@ -312,33 +321,55 @@ const Academics = () => {
 
                                     <Grid container spacing={2}>
                                         <Grid item xs={6}>
-                                            <label htmlFor="governmentId" style={{ display:'flex', alignItems: 'center', color: 'black' }}>
-                                            <CloudUploadIcon sx={{ marginRight: 1, color: 'blue' }} />
-                                            {governmentIDFileName ? <p>{governmentIDFileName}</p>: 'Upload Government ID'}
+                                            <label
+                                                htmlFor="governmentId"
+                                                style={{
+                                                    display: 'flex',
+                                                    marginLeft: '60px',
+                                                    alignItems: 'center',
+                                                    color: 'black',
+                                                    width: '200px',
+                                                    height: '40px',
+                                                }}
+                                            >
+                                                <CloudUploadIcon sx={{ marginRight: 1, color: governmentIDFileName ? 'green' : 'blue', flexShrink: 0 }} />
+                                                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {governmentIDFileName ? <p>{governmentIDFileName}</p> : 'Upload Government ID'}
+                                                </div>
                                             </label>
                                             <input
-                                            id="governmentId"
-                                            type="file"
-                                            onChange={handleGovernmentIDChange}
-                                            style={{ display: 'none' }}
+                                                id="governmentId"
+                                                type="file"
+                                                onChange={handleGovernmentIDChange}
+                                                style={{ display: 'none' }}
                                             />
                                         </Grid>
 
                                         <Grid item xs={6}>
-                                            <label htmlFor="cv" style={{ display: 'flex', alignItems: 'center', color: 'black' }}>
-                                            <CloudUploadIcon sx={{ marginRight: 1, color: 'green' }} />
-                                            {cvFileName ? <p>{cvFileName}</p> : 'Upload CV'}
+                                            <label
+                                                htmlFor="cv"
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    marginLeft: '80px',
+                                                    color: 'black',
+                                                    width: '200px',
+                                                    height: '40px',
+                                                }}
+                                            >
+                                                <CloudUploadIcon sx={{ marginRight: 1, color: cvFileName ? 'green' : 'blue', flexShrink: 0 }} />
+                                                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {cvFileName ? <p>{cvFileName}</p> : 'Upload CV'}
+                                                </div>
                                             </label>
                                             <input
-                                            id="cv"
-                                            type="file"
-                                            onChange={handleCVChange}
-                                            style={{ display: 'none' }}
+                                                id="cv"
+                                                type="file"
+                                                onChange={handleCVChange}
+                                                style={{ display: 'none' }}
                                             />
                                         </Grid>
                                     </Grid>
-
-                                   
 
                                     <Grid item xs={12}>
                                         <div>
