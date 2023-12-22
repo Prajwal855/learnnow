@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton, InputBase, Stack, alpha, styled } from '@mui/material';
+import { Button, Grid, IconButton, InputBase, Stack, Typography, alpha, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import courseImage from '../assets/images/courseimage.jpg';
 import CreateQuiz from '../assets/images/create_quiz.jpeg';
 import createstudymaterial from '../assets/images/Create_studyMaterial.jpg';
 import createChapter from '../assets/images/createchap.jpg';
-import Quiz from '../assets/images/quiztime.png';
+import youtubelogo from '../assets/images/download (6).png'
 import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import DehazeIcon from '@mui/icons-material/Dehaze';
@@ -175,6 +175,10 @@ const Home = () => {
     setLoading(true);
     navigate('/Quiz_form');
   };
+  const handleYouTubeClick = async () => {
+    setLoading(true);
+    navigate('/youtube');
+  };
 
   const handleCreateChapterClick = async () => {
     setLoading(true);
@@ -218,6 +222,7 @@ const Home = () => {
                   Take Quiz
                 </Button>
               )}
+             <img src={youtubelogo} className="youtube--icon" onClick={handleYouTubeClick}/>
               <Button onClick={handleLogoutClick} variant="contained">
                 Logout
               </Button>
@@ -233,15 +238,15 @@ const Home = () => {
                   <Grid item xs={12} md={9}>
                     <Grid container spacing={2}>
                       {articleData.slice(0, 8).map((item) => (
-                        <Grid key={item.id} item xs={12} sm={6} md={3} lg={3} onClick={() => handleImageClick(item.url)}>
-                          <h2>{item.title}</h2>
+                        <Grid key={item.id} item xs={12} onClick={() => handleImageClick(item.url)}>
+                          <Typography style={{ color: '#000', fontSize:'50px', fontWeight:700}}>{item.title}</Typography>
                           <div style={{ textAlign: 'center', cursor: 'pointer' }}>
                             <img
                               src={item.urlToImage}
                               alt={item.title}
                               style={{ width: '100%', height: 'auto' }}
                             />
-                            <p>{item.description}</p>
+                            <Typography style={{ color: '#000'}}>{item.description}</Typography>
                           </div>
                         </Grid>
                       ))}
@@ -266,19 +271,18 @@ const Home = () => {
                 </>
               ) : (
                 <>
-
                   <Grid item xs={12} md={12}>
                     <Grid container spacing={2}>
                       {articleData.slice(0, 12).map((item) => (
-                        <Grid key={item.id} item xs={12} sm={6} md={4} lg={3} onClick={() => handleImageClick(item.url)}>
-                          <h2>{item.title}</h2>
+                        <Grid key={item.id} item xs={12} onClick={() => handleImageClick(item.url)}>
+                           <Typography style={{ color: '#000', fontSize:'50px', fontWeight:700}}>{item.title}</Typography>
                           <div style={{ textAlign: 'center', cursor: 'pointer' }}>
                             <img
                               src={item.urlToImage}
                               alt={item.title}
                               style={{ width: '100%', height: 'auto' }}
                             />
-                            <p>{item.description}</p>
+                            <Typography style={{ color: '#000'}}>{item.description}</Typography>
                           </div>
                         </Grid>
                       ))}

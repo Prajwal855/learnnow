@@ -55,14 +55,14 @@ const LandingPage = () => {
         <Grid container justifyContent="center" spacing={2}>
             {articleData.map((item) => (
               <Grid key={item.id} item xs={12} sm={6} md={4} lg={3} onClick={() => handleImageClick(item.url)}>
-                <h2>{item.title}</h2>
+                <h2 style={{color:'#000'}}>{item.title}</h2>
                 <div style={{ textAlign: 'center', cursor: 'pointer' }}>
                   <img
                     src={item.urlToImage}
                     alt={item.title}
                     style={{ width: '100%', height: 'auto' }}
                   />
-                  <p>{item.description}</p>
+                  <p style={{color:'#000'}}>{item.description}</p>
                 </div>
               </Grid>
             ))}

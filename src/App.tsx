@@ -15,6 +15,7 @@ import QuizQuestions from './components/QuizQuestions';
 import Result from './components/Result';
 import CourseList from './components/CoursesList';
 import Questions from './components/Questions';
+import YouTubeFeature from './components/youtube';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
       <Route path='/Quiz' element={<QuizQuestions/>}/>
       <Route path='/Result' element={<Result/>}/>
       <Route path='/create_questions' element={<Questions/>}/>
+      <Route path='/youtube' element={<YouTubeFeature/>}/>
     </Routes>
   );
 }
